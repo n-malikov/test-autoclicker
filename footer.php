@@ -28,17 +28,15 @@
             }
         });
 
-        // ===== Глобальный обработчик кликов по всем <a> =====
-        $('a').on('click', function (e) {
+        // ===== Глобальный обработчик всех внутренних ссылок =====
+        $('a').on('click', function () {
             const href = $(this).attr('href');
-
-            // Фильтруем: только внутренние переходы
             if (href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('#')) {
                 setCookie('clickSource', 'user');
             }
         });
 
-        // ===== Определение текущего слага и переход =====
+        // ===== Определение текущего слага и расчёт следующего =====
         const currentPath = window.location.pathname;
         const currentSlug = currentPath.split('/').filter(Boolean).pop();
 
@@ -47,20 +45,22 @@
             return slug === currentSlug;
         });
 
-        // Если slug не найден — начни сначала
+        // Если не найдено — начинаем сначала
         if (currentIndex === -1) {
             currentIndex = 0;
         } else {
             currentIndex = (currentIndex + 1) % hrefList.length;
         }
 
-        // ===== Автоклик =====
+        // ===== Установка таймера в зависимости от clickSource =====
+        const delay = clickSource === 'user' ? 10000 : 7000;
+
         setTimeout(() => {
             setCookie('clickSource', 'auto');
             const nextHref = hrefList[currentIndex];
-            console.log('Redirecting to:', nextHref);
+            console.log(`Redirecting to: ${nextHref} after ${delay / 1000} seconds`);
             window.location.href = nextHref;
-        }, 7000);
+        }, delay);
     });
 
 
