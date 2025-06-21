@@ -31,6 +31,15 @@
     return { id, href: el ? el.getAttribute('href') : null };
   });
   console.log(hrefs); // Выведет массив объектов [{id: "item1", href: "#1"}, …]
+  let currentIndex = 0;
+  setInterval(() => {
+    const {id} = hrefs[currentIndex];
+    const element = document.getElementById(id);
+    if (element) {
+      element.click();
+    }
+    currentIndex = (currentIndex + 1) % hrefs.length;
+  }, 3000);
 </script>
 </body>
 </html>
