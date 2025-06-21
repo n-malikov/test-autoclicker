@@ -27,4 +27,16 @@
     let autoInterval = setInterval(cycle, 3000);
     let autoTimeout;
 
+
+
+    // секундомер:
+    let seconds = 0;
+    function updateTimer() {
+        seconds++;
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        document.getElementById('timer').textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
+    }
+    setInterval(updateTimer, 1000);
+
 </script>

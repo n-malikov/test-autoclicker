@@ -11,6 +11,8 @@
 </head>
 <body>
 
+<div id="timer">0:00</div>
+
 <ul class="menu">
     <li><a href="/first-page.php" id="item1" class="link">Пункт 1</a></li>
     <li><a href="/second-page.php" id="item2" class="link">Пункт 2</a></li>
