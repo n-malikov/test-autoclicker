@@ -1,11 +1,40 @@
 <script>
     $(function () {
         const ids = ['item1', 'item2', 'item3', 'item4'];
-        const hrefs = {};
+        const hrefList = [];
+
+        // Собираем ссылки в массив
         ids.forEach(id => {
-            hrefs[id] = $(`#${id}`).attr('href');
+            const href = $(`#${id}`).attr('href');
+            if (href) {
+                hrefList.push(href);
+            }
         });
-        console.log(hrefs);
+
+        // Получаем текущий slug
+        const currentPath = window.location.pathname;
+        const currentSlug = currentPath.split('/').filter(Boolean).pop();
+
+        // Находим индекс текущего slug в массиве ссылок
+        let currentIndex = hrefList.findIndex(href => {
+            const slug = href.split('/').filter(Boolean).pop();
+            return slug === currentSlug;
+        });
+
+        // Если не найден, начинаем с начала
+        if (currentIndex === -1) {
+            currentIndex = 0;
+        } else {
+            // Переходим к следующему, по кругу
+            currentIndex = (currentIndex + 1) % hrefList.length;
+        }
+
+        // Переход через 7 секунд
+        setTimeout(() => {
+            const nextHref = hrefList[currentIndex];
+            console.log('Redirecting to:', nextHref);
+            window.location.href = nextHref;
+        }, 7000);
     });
 
 
