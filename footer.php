@@ -1,12 +1,12 @@
 <script>
     $(function () {
         const ids = ['item1', 'item2', 'item3', 'item4'];
-        const idToHref = {};
+        const hrefs = {};
         ids.forEach(id => {
             const href = $(`#${id}`).attr('href');
-            idToHref[id] = href;
+            hrefs[id] = href;
         });
-        console.log(idToHref);
+        console.log(hrefs);
     });
 
 
