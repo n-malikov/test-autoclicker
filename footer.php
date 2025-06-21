@@ -3,7 +3,24 @@
         const ids = ['item1', 'item2', 'item3', 'item4'];
         const hrefList = [];
 
-        // Собираем ссылки в массив
+        // ===== Helpers для куков =====
+        function setCookie(name, value, days = 1) {
+            const expires = new Date(Date.now() + days * 864e5).toUTCString();
+            document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+        }
+
+        function getCookie(name) {
+            return document.cookie.split('; ').reduce((r, v) => {
+                const parts = v.split('=');
+                return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+            }, null);
+        }
+
+        // ===== Вывод источника клика =====
+        const clickSource = getCookie('clickSource');
+        console.log('Click source:', clickSource || 'none');
+
+        // ===== Сбор ссылок из массива =====
         ids.forEach(id => {
             const href = $(`#${id}`).attr('href');
             if (href) {
@@ -11,26 +28,35 @@
             }
         });
 
-        // Получаем текущий slug
+        // ===== Глобальный обработчик кликов по всем <a> =====
+        $('a').on('click', function (e) {
+            const href = $(this).attr('href');
+
+            // Фильтруем: только внутренние переходы
+            if (href && !href.startsWith('http') && !href.startsWith('mailto:') && !href.startsWith('#')) {
+                setCookie('clickSource', 'user');
+            }
+        });
+
+        // ===== Определение текущего слага и переход =====
         const currentPath = window.location.pathname;
         const currentSlug = currentPath.split('/').filter(Boolean).pop();
 
-        // Находим индекс текущего slug в массиве ссылок
         let currentIndex = hrefList.findIndex(href => {
             const slug = href.split('/').filter(Boolean).pop();
             return slug === currentSlug;
         });
 
-        // Если не найден, начинаем с начала
+        // Если slug не найден — начни сначала
         if (currentIndex === -1) {
             currentIndex = 0;
         } else {
-            // Переходим к следующему, по кругу
             currentIndex = (currentIndex + 1) % hrefList.length;
         }
 
-        // Переход через 7 секунд
+        // ===== Автоклик =====
         setTimeout(() => {
+            setCookie('clickSource', 'auto');
             const nextHref = hrefList[currentIndex];
             console.log('Redirecting to:', nextHref);
             window.location.href = nextHref;
