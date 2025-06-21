@@ -6,7 +6,7 @@
     });
 
     // Найти стартовый индекс по текущему хешу
-    let currentIndex = hrefs.findIndex(item => item.href === window.location.hash);
+    let currentIndex = hrefs.findIndex(item => item.href === window.location.pathname);
     if (currentIndex === -1) currentIndex = 0;
 
     // Подсветка активного пункта
@@ -20,29 +20,11 @@
     // Функция автоклика (смены хеша и переключения индекса)
     function cycle() {
         currentIndex = (currentIndex + 1) % hrefs.length;
-        const el = document.getElementById(hrefs[currentIndex].id);
-        if (el) {
-            el.click();
-        }
-        updateActive(currentIndex);
+        window.location.href = hrefs[currentIndex].href;
     }
 
     // Запуск автокликера по таймеру
     let autoInterval = setInterval(cycle, 3000);
     let autoTimeout;
 
-    window.addEventListener('hashchange', () => {
-        clearInterval(autoInterval);
-        if (typeof autoTimeout !== 'undefined') {
-            clearTimeout(autoTimeout);
-        }
-        let idx = hrefs.findIndex(item => item.href === window.location.hash);
-        currentIndex = idx === -1 ? 0 : idx;
-        updateActive(currentIndex);
-        // перезапуск автокликера через 3 секунды после ручного клика
-        autoTimeout = setTimeout(() => {
-            cycle();
-            autoInterval = setInterval(cycle, 3000);
-        }, 3000);
-    });
 </script>
