@@ -28,9 +28,9 @@
   // Получаем значение href для каждого элемента и формируем новый массив
   const hrefs = ids.map(id => {
     const el = document.getElementById(id);
-    return el ? el.getAttribute('href') : null;
+    return { id, href: el ? el.getAttribute('href') : null };
   });
-  console.log(hrefs); // Выведет массив значений href, например ["#1","#2","#3","#4"]
+  console.log(hrefs); // Выведет массив объектов [{id: "item1", href: "#1"}, …]
 </script>
 </body>
 </html>
