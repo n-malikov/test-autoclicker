@@ -17,29 +17,56 @@
     <li><a href="#3" id="item3" class="link">Пункт 3</a></li>
     <li><a href="#5" id="item5" class="link">Пункт 5</a></li>
 </ul>
-
-<a href="#4" id="item4">Пункт 4</a>
-
-
+<a href="#4" id="item4" class="link">Пункт 4</a>
 
 <script>
-  // Собираем элементы по их id
   const ids = ['item1', 'item2', 'item3', 'item4'];
-  // Получаем значение href для каждого элемента и формируем новый массив
   const hrefs = ids.map(id => {
     const el = document.getElementById(id);
     return { id, href: el ? el.getAttribute('href') : null };
   });
-  console.log(hrefs); // Выведет массив объектов [{id: "item1", href: "#1"}, …]
-  let currentIndex = 0;
-  setInterval(() => {
-    const {id} = hrefs[currentIndex];
-    const element = document.getElementById(id);
-    if (element) {
-      element.click();
-    }
+
+  // Найти стартовый индекс по текущему хешу
+  let currentIndex = hrefs.findIndex(item => item.href === window.location.hash);
+  if (currentIndex === -1) currentIndex = 0;
+
+  // Подсветка активного пункта
+  function updateActive(index) {
+    ids.forEach(id => document.getElementById(id).classList.remove('active'));
+    const el = document.getElementById(hrefs[index].id);
+    if (el) el.classList.add('active');
+  }
+  updateActive(currentIndex);
+
+  // Функция автоклика (смены хеша и переключения индекса)
+  function cycle() {
     currentIndex = (currentIndex + 1) % hrefs.length;
-  }, 3000);
+    const el = document.getElementById(hrefs[currentIndex].id);
+    if (el) {
+      el.click();
+    }
+    updateActive(currentIndex);
+  }
+
+  // Запуск автокликера по таймеру
+  let autoInterval = setInterval(cycle, 3000);
+  let autoTimeout;
+
+  window.addEventListener('hashchange', () => {
+    clearInterval(autoInterval);
+    if (typeof autoTimeout !== 'undefined') {
+      clearTimeout(autoTimeout);
+    }
+    let idx = hrefs.findIndex(item => item.href === window.location.hash);
+    currentIndex = idx === -1 ? 0 : idx;
+    updateActive(currentIndex);
+    // перезапуск автокликера через 3 секунды после ручного клика
+    autoTimeout = setTimeout(() => {
+      cycle();
+      autoInterval = setInterval(cycle, 3000);
+    }, 3000);
+  });
 </script>
+
 </body>
 </html>
