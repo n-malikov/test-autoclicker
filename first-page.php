@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Меню с автокликом</title>
+    <script src="jquery.min.js"></script>
     <style>
         .menu { list-style: none; padding: 0; }
         .menu li { display: inline-block; margin-right: 15px; padding: 5px 10px; background: #f0f0f0; cursor: pointer; transition: background 0.3s; }
