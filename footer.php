@@ -3,8 +3,7 @@
         const ids = ['item1', 'item2', 'item3', 'item4'];
         const hrefs = {};
         ids.forEach(id => {
-            const href = $(`#${id}`).attr('href');
-            hrefs[id] = href;
+            hrefs[id] = $(`#${id}`).attr('href');
         });
         console.log(hrefs);
     });
